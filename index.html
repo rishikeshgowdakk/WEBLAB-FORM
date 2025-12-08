@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form - Rishikesh Gowda K K</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 450px;
+        }
+        .form-wrapper,
+        .result-wrapper {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .header {
+            background-color: #2563eb;
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        form {
+            padding: 32px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+        }
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        textarea {
+            resize: vertical;
+            font-family: inherit;
+        }
+        button {
+            width: 100%;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #1d4ed8;
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .success-header {
+            background-color: #10b981;
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .success-header svg {
+            margin-bottom: 20px;
+        }
+        .success-header h2 {
+            font-size: 22px;
+            margin: 0;
+            font-weight: 600;
+        }
+        .result-content {
+            padding: 40px 32px;
+            background-color: #f3f4f6;
+        }
+        .result-intro {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 30px;
+            font-size: 15px;
+        }
+        .data-row {
+            display: flex;
+            justify-content: flex-start;
+            align-items: baseline;
+            padding: 12px 0;
+            margin-bottom: 8px;
+            background-color: transparent;
+            border-radius: 0;
+            border-left: none;
+            gap: 12px;
+        }
+        .data-label {
+            font-weight: 500;
+            color: #4b5563;
+            min-width: 100px;
+            font-size: 15px;
+        }
+        .data-value {
+            color: #1f2937;
+            text-align: left;
+            max-width: none;
+            word-break: break-word;
+            font-size: 15px;
+        }
+        .back-btn {
+            background-color: #6b7280;
+            margin-top: 30px;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+        .back-btn:hover {
+            background-color: #4b5563;
+        }
+        #loading {
+            font-weight: 600;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        @media (max-width: 600px) {
+            .container {
+                max-width: 100%;
+            }
+            form {
+                padding: 24px;
+            }
+            .data-row {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .data-value {
+                text-align: left;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="form-container" class="form-wrapper">
+            <div class="header">
+                <h1>Student Registration Form</h1>
+                <p>By: Rishikesh Gowda K K</p>
+            </div>
+            <form id="registrationForm">
+                <div class="form-group">
+                    <label for="fullName">Full Name *</label>
+                    <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Enter phone number" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender">Gender *</label>
+                    <select id="gender" name="gender" required>
+                        <option value="">Select</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Others</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="course">Course *</label>
+                    <select id="course" name="course" required>
+                        <option value="">Select Course</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Information Science">Information Science</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Mechanical">Mechanical</option>
+                        <option value="Civil">Civil</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="comments">Additional Comments</label>
+                    <textarea id="comments" name="comments" rows="4" placeholder="Any additional information..."></textarea>
+                </div>
+
+                <button type="submit" id="submitBtn">Submit Application</button>
+                <div id="loading" style="display: none; text-align: center; margin-top: 10px; color: #2563eb;">
+                    Processing...
+                </div>
+            </form>
+        </div>
+
+        <div id="result-container" style="display: none;"></div>
+    </div>
+
+    <script>
+        window.addEventListener('load', function() {
+            const $ = window.jQuery;
+            
+            if (!$) {
+                console.error('jQuery not loaded');
+                return;
+            }
+            
+            $(document).ready(function() {
+                $("#registrationForm").on("submit", function (e) {
+                    e.preventDefault();
+                    
+                    $("#submitBtn").prop("disabled", true).text("Sending...");
+                    $("#loading").show();
+                    
+                    const formData = {
+                        fullName: $("#fullName").val().trim(),
+                        email: $("#email").val().trim(),
+                        phone: $("#phone").val().trim(),
+                        gender: $("#gender").val(),
+                        course: $("#course").val(),
+                        comments: $("#comments").val().trim() || "N/A"
+                    };
+                    
+                    setTimeout(function() {
+                        const resultHTML = `
+                            <div class="result-wrapper">
+                                <div class="success-header">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                    </svg>
+                                    <h2>Registration Successful!</h2>
+                                </div>
+                                
+                                <div class="result-content">
+                                    <p class="result-intro">
+                                        Here is the information we received:
+                                    </p>
+                                    
+                                    <div class="data-row">
+                                        <span class="data-label">Full Name:</span>
+                                        <span class="data-value">${formData.fullName}</span>
+                                    </div>
+                                    
+                                    <div class="data-row">
+                                        <span class="data-label">Email:</span>
+                                        <span class="data-value">${formData.email}</span>
+                                    </div>
+                                    
+                                    <div class="data-row">
+                                        <span class="data-label">Phone:</span>
+                                        <span class="data-value">${formData.phone}</span>
+                                    </div>
+                                    
+                                    <div class="data-row">
+                                        <span class="data-label">Course:</span>
+                                        <span class="data-value">${formData.course}</span>
+                                    </div>
+                                    
+                                    <div class="data-row">
+                                        <span class="data-label">Comments:</span>
+                                        <span class="data-value">${formData.comments}</span>
+                                    </div>
+                                    
+                                    <button id="backBtn" class="back-btn">Submit Another Application</button>
+                                </div>
+                            </div>
+                        `;
+                        
+                        $("#form-container").hide();
+                        $("#result-container").html(resultHTML).fadeIn();
+                    }, 800);
+                });
+                
+                $(document).on("click", "#backBtn", function() {
+                    $("#result-container").hide();
+                    $("#form-container").fadeIn();
+                    $("#registrationForm")[0].reset();
+                    $("#submitBtn").prop("disabled", false).text("Submit Application");
+                    $("#loading").hide();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
