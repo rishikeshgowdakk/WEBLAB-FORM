@@ -36,9 +36,20 @@
         .avatar{width:68px; height:68px; border-radius:12px; background:linear-gradient(135deg,var(--accent),#7c3aed); display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px}
         .studentInfo{font-weight:600}
         .studentSmall{color:var(--muted); font-size:13px}
-        .cardBig{background:linear-gradient(180deg,#ffffff, #fbfdff); padding:34px; border-radius:12px; text-align:center; box-shadow:0 16px 40px rgba(16,24,40,0.08)}
+        .cardBig{background:linear-gradient(180deg,#ffffff, #fbfdff); padding:34px; border-radius:12px; text-align:center; box-shadow:0 16px 40px rgba(16,24,40,0.08); position:relative}
         .cardBig h1{margin:0; font-size:28px; color:#111827}
-        .counterNum{font-size:48px; font-weight:700; color:var(--accent); margin-top:18px}
+        .counterWrap{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:18px}
+        .counterBadge{background:linear-gradient(90deg,#eef2ff,#ffffff); padding:18px 28px; border-radius:12px; box-shadow:0 8px 24px rgba(37,99,235,0.08); display:inline-block}
+        .counterNum{font-size:54px; font-weight:800; color:var(--accent); line-height:1}
+        .counterLabel{font-size:13px;color:var(--muted); margin-top:6px}
+        .counterActions{margin-left:8px; display:flex; flex-direction:column; gap:8px}
+        .btn{background:var(--accent); color:#fff; border:0; padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:600}
+        .btn.ghost{background:transparent;color:var(--accent); border:1px solid rgba(37,99,235,0.12)}
+        .pop{transform-origin:center center; animation:pop .36s ease}
+        @keyframes pop{0%{transform:scale(.6);opacity:0}50%{transform:scale(1.08);opacity:1}100%{transform:scale(1);opacity:1}}
+        /* simple confetti */
+        .confetti{pointer-events:none; position:absolute; inset:0; overflow:hidden}
+        .confetti i{position:absolute; width:8px;height:8px; background:var(--accent); opacity:0.95; transform:translateY(-10px); border-radius:2px}
         .rightCard{background:var(--card); border-radius:12px; padding:20px; box-shadow:0 8px 30px rgba(16,24,40,0.06)}
         @media(max-width:880px){.page{grid-template-columns:1fr;}.rightCard{order:2}.leftCard{order:1}}
     </style>
@@ -63,8 +74,18 @@
 
             <div class="cardBig">
                 <h1>Welcome to Our Website!</h1>
-                <div class="counterNum" id="counter">1</div>
-                <div style="margin-top:8px;color:var(--muted)">visitor count (local only)</div>
+                <div class="counterWrap">
+                    <div class="counterBadge pop" id="counterBadge">
+                        <div class="counterNum" id="counter">1</div>
+                        <div class="counterLabel">Visitors (local)</div>
+                    </div>
+                    <div class="counterActions">
+                        <button class="btn" id="viewBtn">Celebrate 🎉</button>
+                        <button class="btn ghost" id="resetBtn">Reset</button>
+                    </div>
+                </div>
+                <div style="margin-top:8px;color:var(--muted)">counts are stored in your browser and increment on each visit</div>
+                <div class="confetti" id="confetti"></div>
             </div>
         </section>
 
@@ -75,15 +96,89 @@
     </div>
 
     <script>
-        // keep same behavior: localStorage visitor count
-        function updateCounter(){
-            const key='visitorCount';
-            let v = localStorage.getItem(key);
-            if(!v){ v=1; } else { v = parseInt(v,10) + 1 }
-            localStorage.setItem(key, v);
-            document.getElementById('counter').textContent = v;
+        // Visitor counter with animated transition + confetti
+        const KEY = 'visitorCount';
+        const counterEl = document.getElementById('counter');
+        const badge = document.getElementById('counterBadge');
+        const confettiRoot = document.getElementById('confetti');
+
+        function readCount(){
+            const v = localStorage.getItem(KEY);
+            return v ? parseInt(v,10) : 0;
         }
-        window.addEventListener('load', updateCounter);
+
+        function writeCount(n){
+            localStorage.setItem(KEY, n);
+        }
+
+        function animateNumber(from, to, duration = 700){
+            const start = performance.now();
+            const delta = to - from;
+            function frame(now){
+                const t = Math.min(1, (now - start) / duration);
+                const eased = 1 - Math.pow(1 - t, 3);
+                const current = Math.floor(from + delta * eased);
+                counterEl.textContent = current;
+                if(t < 1) requestAnimationFrame(frame);
+                else counterEl.textContent = to;
+            }
+            requestAnimationFrame(frame);
+        }
+
+        function popAnimation(){
+            badge.classList.remove('pop');
+            // retrigger
+            void badge.offsetWidth;
+            badge.classList.add('pop');
+        }
+
+        function emitConfetti(count = 18){
+            const colors = ['#2563eb','#7c3aed','#f97316','#10b981','#ef4444'];
+            for(let i=0;i<count;i++){
+                const el = document.createElement('i');
+                el.style.left = (50 + (Math.random()-0.5)*60) + '%';
+                el.style.top = '10%';
+                el.style.background = colors[Math.floor(Math.random()*colors.length)];
+                confettiRoot.appendChild(el);
+                const dx = (Math.random()-0.5) * 300;
+                const dy = 200 + Math.random()*200;
+                const rot = (Math.random()-0.5)*720;
+                el.animate([
+                    {transform:`translate3d(0,0,0) rotate(0deg)`, opacity:1},
+                    {transform:`translate3d(${dx}px,${dy}px,0) rotate(${rot}deg)`, opacity:0}
+                ], {duration:800+Math.random()*600, easing:'cubic-bezier(.2,.8,.2,1)'}).onfinish = ()=> el.remove();
+            }
+        }
+
+        function incrementAndShow(){
+            const prev = readCount();
+            const next = prev + 1;
+            writeCount(next);
+            animateNumber(Math.max(0, prev), next);
+            popAnimation();
+            // celebrate on milestones (every 5) or simple small confetti
+            if(next % 5 === 0) emitConfetti(30); else emitConfetti(10);
+        }
+
+        // Reset handler
+        document.getElementById('resetBtn').addEventListener('click', ()=>{
+            writeCount(0);
+            animateNumber(parseInt(counterEl.textContent,10)||0, 0);
+            popAnimation();
+        });
+
+        // Manual celebrate button
+        document.getElementById('viewBtn').addEventListener('click', ()=>{
+            emitConfetti(40);
+            popAnimation();
+        });
+
+        // On load: increment and animate from previous
+        window.addEventListener('load', ()=>{
+            const prev = readCount();
+            // if no previous value, treat as increment to 1
+            incrementAndShow();
+        });
     </script>
 </body>
 </html>
