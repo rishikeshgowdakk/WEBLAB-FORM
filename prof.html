@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rishikesh Gowda K K | Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 25%, #7e22ce 50%, #c026d3 75%, #db2777 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: #1a202c;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar-nav {
+            position: fixed;
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            margin: 25px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-dot:hover, .nav-dot.active {
+            background: #fff;
+            transform: scale(1.5);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        }
+
+        .nav-dot::before {
+            content: attr(data-label);
+            position: absolute;
+            left: 30px;
+            top: -5px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            color: #1a202c;
+        }
+
+        .nav-dot:hover::before {
+            opacity: 1;
+        }
+
+        /* Main Content Wrapper */
+        .content-wrapper {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 60px;
+            box-shadow: 0 60px 120px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        /* Top Navigation Bar */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #7e22ce, #db2777);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links button {
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            font-weight: 600;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links button.active {
+            color: #7e22ce;
+            background: linear-gradient(135deg, rgba(126, 34, 206, 0.1), rgba(219, 39, 119, 0.1));
+        }
+
+        .hero-header h1 {
+            font-size: 56px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #1e3c72, #7e22ce, #db2777);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            letter-spacing: -2px;
+        }
+
+        .hero-header p { color: #6b7280; }
+
+        .card { border-radius: 24px; padding: 35px; }
+
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+
+        .intro-section { background: linear-gradient(135deg, #faf5ff, #ffffff); border-radius: 24px; padding: 40px; margin-bottom: 40px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); border-left: 6px solid #7e22ce; }
+
+        .declaration-box { background: linear-gradient(135deg, #fef3c7, #fef9e7); padding: 25px; border-radius: 16px; margin-top: 30px; border-left: 5px solid #f59e0b; font-style: italic; color: #78350f; }
+
+        .footer { text-align: center; margin-top: 60px; padding-top: 30px; border-top: 2px solid #e5e7eb; color: #6b7280; font-weight: 600; }
+
+        @media (max-width: 768px) { .sidebar-nav { display: none; } .content-wrapper { padding: 30px; } .hero-header h1 { font-size: 36px; } }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar Navigation Dots -->
+<div class="sidebar-nav">
+    <div class="nav-dot active" data-label="Home" onclick="switchPage('home', this)"></div>
+    <div class="nav-dot" data-label="Resume" onclick="switchPage('resume', this)"></div>
+    <div class="nav-dot" data-label="Bio-Data" onclick="switchPage('biodata', this)"></div>
+</div>
+
+<div class="container">
+    <div class="content-wrapper">
+        
+        <!-- Top Navigation -->
+        <div class="top-nav">
+            <div class="logo">RGK</div>
+            <div class="nav-links">
+                <button class="active" onclick="switchPageTop('home', this)">Home</button>
+                <button onclick="switchPageTop('resume', this)">Resume</button>
+                <button onclick="switchPageTop('biodata', this)">Bio-Data</button>
+            </div>
+        </div>
+
+        <!-- HOME / ABOUT SECTION -->
+        <div id="home" class="page-section active">
+            <div class="hero-header">
+                <h1>Rishikesh Gowda K K</h1>
+                <p class="subtitle">Computer Science Student | Full-Stack Developer Enthusiast</p>
+                <p>JSS Academy Of Technical Education, Bengaluru</p>
+                <p>📧 rishikeshgowdakk@gmail.com | 📱 9980244123</p>
+            </div>
+
+            <h2>About Me</h2>
+            <div class="intro-section">
+                <h3>Who I Am</h3>
+                <p>My name is Rishikesh Gowda K K, and I'm a passionate and driven Computer Science student. I thrive on challenges and am constantly seeking to learn new technologies and improve my skills. My journey into the tech world started with a simple "Hello, World!" and has since evolved into a deep fascination with building elegant, efficient, and user-friendly digital experiences.</p>
+                <p>As a fresher, I am eager to apply my academic knowledge to real-world problems and contribute to a forward-thinking team. I am a quick learner, a collaborative team player, and I'm ready to make a meaningful impact.</p>
+            </div>
+
+            <div class="grid-3">
+                <div class="grid-card">
+                    <div class="icon">🎓</div>
+                    <h3>Education</h3>
+                    <ul>
+                        <li>JSS Academy of Technical Education (2023-2027)</li>
+                        <li>CGPA: 8.00</li>
+                    </ul>
+                </div>
+
+                <div class="grid-card">
+                    <div class="icon">❤️</div>
+                    <h3>Interests</h3>
+                    <ul>
+                        <li>Open Source Development</li>
+                        <li>AI & Machine Learning</li>
+                        <li>UI/UX Design</li>
+                        <li>Competitive Programming</li>
+                    </ul>
+                </div>
+
+                <div class="grid-card">
+                    <div class="icon">🚀</div>
+                    <h3>Aspirations</h3>
+                    <p>To become a full-stack developer, contributing to innovative products and solutions that people use and love every day.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESUME SECTION -->
+        <div id="resume" class="page-section">
+            <h2>Education</h2>
+            <div class="card">
+                <h3>JSSATE, Bengaluru</h3>
+                <p>B.E. Computer Science & Engineering (2023 - 2027)</p>
+                <p><strong>CGPA:</strong> 8.00</p>
+            </div>
+
+            <h2>Projects</h2>
+            <div class="card">
+                <h3>AI-Powered Chatbot System</h3>
+                <p>Developed an intelligent conversational agent using natural language processing with a modern, responsive interface for customer support automation.</p>
+            </div>
+        </div>
+
+        <!-- BIO-DATA SECTION -->
+        <div id="biodata" class="page-section">
+            <h2>Bio-Data</h2>
+            <table class="data-table">
+                <tr><td class="label">Full Name</td><td class="value">Rishikesh Gowda K K</td></tr>
+                <tr><td class="label">Date of Birth</td><td class="value">06/06/2005</td></tr>
+                <tr><td class="label">Gender</td><td class="value">Male</td></tr>
+                <tr><td class="label">Nationality</td><td class="value">Indian</td></tr>
+                <tr><td class="label">Father's Name</td><td class="value">Krishne Gowda K B</td></tr>
+                <tr><td class="label">Mother's Name</td><td class="value">Manjula</td></tr>
+                <tr><td class="label">Address</td><td class="value">Koramangala, Bangalore</td></tr>
+                <tr><td class="label">Contact Number</td><td class="value">9980244123</td></tr>
+                <tr><td class="label">Email ID</td><td class="value">rishikeshgowdakk@gmail.com</td></tr>
+                <tr><td class="label">Languages Known</td><td class="value">English, Kannada, Hindi, Tamil, Malayalam</td></tr>
+                <tr><td class="label">Hobbies</td><td class="value">Coding, Cricket, Photography</td></tr>
+            </table>
+
+            <div class="declaration-box">
+                <strong>Declaration:</strong> I hereby declare that all the information provided above is accurate and true to the best of my knowledge.
+            </div>
+        </div>
+
+        <div class="footer">
+            © 2025 Rishikesh Gowda K K — All Rights Reserved
+        </div>
+
+    </div>
+</div>
+
+<script>
+function switchPage(pageName, dotElement) {
+    const sections = document.getElementsByClassName("page-section");
+    for (let section of sections) section.classList.remove("active");
+    const dots = document.querySelectorAll(".nav-dot");
+    dots.forEach(dot => dot.classList.remove("active"));
+    const buttons = document.querySelectorAll(".nav-links button");
+    buttons.forEach(btn => btn.classList.remove("active"));
+    document.getElementById(pageName).classList.add("active");
+    if (dotElement) dotElement.classList.add("active");
+    const btnIndex = pageName === 'home' ? 0 : pageName === 'resume' ? 1 : 2;
+    if (buttons[btnIndex]) buttons[btnIndex].classList.add("active");
+}
+
+function switchPageTop(pageName, btnElement) {
+    const sections = document.getElementsByClassName("page-section");
+    for (let section of sections) section.classList.remove("active");
+    const buttons = document.querySelectorAll(".nav-links button");
+    buttons.forEach(btn => btn.classList.remove("active"));
+    const dots = document.querySelectorAll(".nav-dot");
+    dots.forEach(dot => dot.classList.remove("active"));
+    document.getElementById(pageName).classList.add("active");
+    btnElement.classList.add("active");
+    const dotIndex = pageName === 'home' ? 0 : pageName === 'resume' ? 1 : 2;
+    if (dots[dotIndex]) dots[dotIndex].classList.add("active");
+}
+</script>
+
+</body>
+</html>
